@@ -83,8 +83,7 @@ let ws: WebSocket | null = null
 let interval: NodeJS.Timeout | undefined = undefined
 
 onMounted(() => {
-  document.addEventListener('scroll', (event) => {
-    console.log(event)
+  document.addEventListener('scroll', (_) => {
     if (isScrolling.value) {
       return
     }
@@ -166,7 +165,7 @@ const scrollToPosition = (position: number) => {
     top: position,
     behavior: 'smooth'
   })
-  
+
   setTimeout(() => {
     isScrolling.value = false
   }, 750)
