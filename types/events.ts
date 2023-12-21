@@ -1,6 +1,7 @@
 interface PlayerStateUpdateEvent {
   playing: boolean,
-  position: number
+  position: number,
+  timestamp: string
 }
 
 interface PlayerStoppedEvent {}

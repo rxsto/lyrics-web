@@ -1,5 +1,6 @@
 interface Lyrics {
-  lines: Line[]
+  lines: Line[],
+  track: Track
 }
 
 interface Line {
@@ -10,4 +11,17 @@ interface Line {
 interface LineRange {
   start: number,
   end: number
+}
+
+interface Track {
+  album: string,
+  author: string,
+  title: string,
+  albumArt: AlbumArt[]
+}
+
+interface AlbumArt {
+  height: number,
+  width: number,
+  url: string
 }

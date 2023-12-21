@@ -1,8 +1,13 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
+  ssr: false,
+
   modules: [
-    '@nuxtjs/tailwindcss'
+    'nuxt-icon',
+    '@nuxt/ui',
+    '@nuxtjs/tailwindcss',
+    '@vueuse/nuxt'
   ],
 
   runtimeConfig: {
