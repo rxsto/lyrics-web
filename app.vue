@@ -1,9 +1,9 @@
 <template>
   <div class="bg-black text-white p-8 flex flex-col gap-4 py-32">
     <img v-if="art" :src="art.url" alt="Art" :class="width > height ? 'w-screen' : 'h-screen'"
-      class="object-cover fixed scale-150 blur-lg z-0 opacity-20 -translate-x-1/2 left-1/2 -translate-y-1/2 top-1/2">
+         class="object-cover fixed scale-150 blur-lg z-0 opacity-20 -translate-x-1/2 left-1/2 -translate-y-1/2 top-1/2">
     <p :id="`line-${index}`" v-for="(line, index) in lines" :class="index === activeLine ? 'opacity-100' : 'opacity-25'"
-      class="text-4xl font-bold z-10">
+       class="text-4xl font-bold z-10">
       {{ line.line }}
     </p>
     <p class="opacity-10 text-sm">
@@ -20,17 +20,17 @@
   </div>
   <div class="fixed top-8 right-8 z-20 flex gap-4 items-center">
     <button v-if="hasScrolled" @click="resetScrolling()">
-      <Icon name="fluent:arrow-sync-circle-24-filled" class="text-2xl" />
+      <Icon name="fluent:arrow-sync-circle-24-filled" class="text-2xl"/>
     </button>
     <button @click="settingsActive = !settingsActive">
-      <Icon name="fluent:settings-32-filled" class="text-2xl" />
+      <Icon name="fluent:settings-32-filled" class="text-2xl"/>
     </button>
   </div>
   <Transition name="fade">
     <div v-if="settingsActive" class="bg-neutral-800 text-white w-full p-8 fixed bottom-0 z-10">
       <div class="flex items-center gap-4">
         <p class="flex gap-1"><span class="opacity-50">Delay:</span>{{ offset }}ms</p>
-        <URange :min="-2000" :max="2000" v-model="offset" />
+        <URange :min="-2000" :max="2000" v-model="offset"/>
         <UButton @click="offset = DEFAULT_OFFSET">Reset</UButton>
       </div>
     </div>
@@ -38,9 +38,9 @@
 </template>
 
 <script lang="ts" setup>
-const DEFAULT_OFFSET = 500
+const DEFAULT_OFFSET = 300
 
-const { width, height } = useWindowSize()
+const {width, height} = useWindowSize()
 
 const config = useRuntimeConfig()
 
@@ -50,16 +50,25 @@ const apiKey = useCookie('apiKey')
 apiKey.value = apiKey.value || useRoute().query.apiKey as string
 
 if (!apiKey.value) {
-  throw createError({ statusCode: 401, message: 'No API key provided!' })
+  throw createError({statusCode: 401, message: 'No API key provided!'})
 } else {
-  navigateTo('/', { replace: true })
+  navigateTo('/', {replace: true})
 }
 
-const { data: lyrics, refresh } = await useFetch<Lyrics>(`${baseUrl}/current`, {
+const {data: lyrics, refresh} = await useFetch<Lyrics>(`${baseUrl}/current`, {
   headers: {
     'Authorization': apiKey.value
   }
 })
+
+const {data: serverTime} = await useFetch<Time>("https://worldtimeapi.org/api/ip")
+let timeDiscrepancy: number;
+if (!serverTime.value) {
+  timeDiscrepancy = 0;
+} else {
+  timeDiscrepancy = new Date(serverTime.value.utc_datetime).getTime() - Date.now()
+  console.log(timeDiscrepancy);
+}
 
 const lines = computed(() => lyrics.value?.lines)
 const track = computed(() => lyrics.value?.track)
@@ -107,7 +116,7 @@ onMounted(() => {
         position.value = d.position
         isPlaying.value = d.playing
 
-        lastUpdate.value = new Date(d.timestamp).getTime()
+        lastUpdate.value = new Date(d.timestamp).getTime() + timeDiscrepancy
         break
       case 'player_stopped':
         break
@@ -115,10 +124,6 @@ onMounted(() => {
         refresh()
         break
     }
-
-    // player_stopped
-
-    // next_track
   }
 
   if (!lyrics.value) {
@@ -130,7 +135,7 @@ onMounted(() => {
       return
     }
 
-    const currentPosition = position.value + (Date.now() - lastUpdate.value) - offset.value
+    const currentPosition = position.value + (Date.now() - lastUpdate.value) + offset.value
     const indexOfLine = lines.value.findIndex(l => l.range.start < currentPosition && l.range.end >= currentPosition)
 
     activeLine.value = indexOfLine
@@ -179,16 +184,3 @@ onBeforeUnmount(() => {
   }
 })
 </script>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: transform 300ms ease-in-out;
-  transform: translateY(0);
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  transform: translateY(8rem);
-}
-</style>
