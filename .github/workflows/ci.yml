@@ -21,4 +21,5 @@ jobs:
             - name: Deploy
               uses: cloudflare/wrangler-action@v3
               with:
-                apiToken: ${{ secrets.CLOUDFLARE_TOKEN }}                
+                apiToken: ${{ secrets.CLOUDFLARE_TOKEN }}
+                command: pages deploy
