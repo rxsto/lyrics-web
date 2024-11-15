@@ -2,6 +2,9 @@
   "name": "andis-songtexte",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "23"
+  },
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -11,13 +14,14 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
-    "@nuxt/ui": "^2.11.1",
-    "@nuxtjs/tailwindcss": "^6.10.1",
-    "@vueuse/core": "^10.7.0",
-    "@vueuse/nuxt": "^10.7.0",
-    "nuxt": "^3.8.2",
-    "nuxt-icon": "^0.6.7",
-    "vue": "^3.3.12",
-    "vue-router": "^4.2.5"
-  }
+    "@nuxt/ui": "^2.19.2",
+    "@nuxtjs/tailwindcss": "^6.12.2",
+    "@vueuse/core": "^10.11.1",
+    "@vueuse/nuxt": "^10.11.1",
+    "nuxt": "^3.14.159",
+    "nuxt-icon": "^0.6.10",
+    "vue": "^3.5.12",
+    "vue-router": "^4.4.5"
+  },
+  "packageManager": "pnpm@9.13.1+sha512.5ac37545851c55ec58521b6c285db6f848f93ca70889beb4145f5b40fe234e4ea4faee4dad12ac5c139e494374c65d9c3a6ec9a25954378fa286a250e68d2f20"
 }

@@ -1,26 +1,32 @@
-interface Lyrics {
+export interface State {
+  lyrics: Lyrics,
+  time: number,
+  position: number
+}
+
+export interface Lyrics {
   lines: Line[],
   track: Track
 }
 
-interface Line {
+export interface Line {
   line: string,
   range: LineRange
 }
-
-interface LineRange {
+ 
+export interface LineRange {
   start: number,
   end: number
 }
 
-interface Track {
+export interface Track {
   album: string,
   author: string,
   title: string,
   albumArt: AlbumArt[]
 }
 
-interface AlbumArt {
+export interface AlbumArt {
   height: number,
   width: number,
   url: string

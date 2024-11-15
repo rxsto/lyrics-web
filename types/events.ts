@@ -1,11 +1,11 @@
-interface PlayerStateUpdateEvent {
+export interface PlayerStateUpdateEvent {
   playing: boolean,
   position: number,
   timestamp: string
 }
 
-interface PlayerStoppedEvent {}
+export interface PlayerStoppedEvent {}
 
-interface NextTrackEvent {
+export interface NextTrackEvent {
   startPosition: number
 }

@@ -3,7 +3,7 @@
     <img v-if="art" :src="art.url" alt="Art" :class="width > height ? 'w-screen' : 'h-screen'"
          class="object-cover fixed scale-150 blur-lg z-0 opacity-20 -translate-x-1/2 left-1/2 -translate-y-1/2 top-1/2">
     <p :id="`line-${index}`" v-for="(line, index) in lines" :class="index === activeLine ? 'opacity-100' : 'opacity-25'"
-       class="text-4xl font-bold z-10">
+       class="text-4xl font-bold z-10" v-bind:key="index">
       {{ line.line }}
     </p>
     <p class="opacity-10 text-sm">
@@ -38,6 +38,10 @@
 </template>
 
 <script lang="ts" setup>
+import { UseFetchOptions } from './node_modules/nuxt/app';
+import { State } from './types/lyrics';
+import { PlayerStateUpdateEvent } from './types/events';
+
 const DEFAULT_OFFSET = 300
 
 const {width, height} = useWindowSize()
@@ -45,24 +49,24 @@ const {width, height} = useWindowSize()
 const config = useRuntimeConfig()
 
 const baseUrl = config.public.baseUrl
-const apiKey = useCookie('apiKey')
+const apiKey = useCookie<string | null>('apiKey')
 
-apiKey.value = apiKey.value || useRoute().query.apiKey as string
+apiKey.value = useRoute().query.apiKey || apiKey.value;
 
 if (!apiKey.value) {
-  throw createError({statusCode: 401, message: 'No API key provided!'})
+  throw createError({status: 401, message: 'No API key provided!'})
 } else {
   navigateTo('/', {replace: true})
 }
 
-const {data: lyrics, refresh} = await useFetch<Lyrics>(`${baseUrl}/current`, {
+const {data: state, refresh} = await useFetch<State>(`${baseUrl}/current`, {
   headers: {
     'Authorization': apiKey.value
   }
 })
 
-const {data: serverTime} = await useFetch<Time>("https://worldtimeapi.org/api/ip")
 let timeDiscrepancy: number;
+const serverTime = state.value?.time;
 if (!serverTime.value) {
   timeDiscrepancy = 0;
 } else {
@@ -70,6 +74,7 @@ if (!serverTime.value) {
   console.log(timeDiscrepancy);
 }
 
+const lyrics = computed(() => state.value.lyrics)
 const lines = computed(() => lyrics.value?.lines)
 const track = computed(() => lyrics.value?.track)
 const art = computed(() => track.value?.albumArt[track.value?.albumArt.length - 1])
@@ -89,7 +94,7 @@ const hasScrolled = ref(false)
 const offset = useLocalStorage('offset', DEFAULT_OFFSET)
 
 let ws: WebSocket | null = null
-let interval: NodeJS.Timeout | undefined = undefined
+let interval: number | undefined = undefined
 
 onMounted(() => {
   document.addEventListener('scroll', (_) => {
@@ -150,7 +155,7 @@ onMounted(() => {
   }, 250)
 })
 
-watch(scrollingAnchor, (newAnchor) => {
+watch(scrollingAnchor, (newAnchor: number) => {
   if (hasScrolled.value) {
     return
   }
