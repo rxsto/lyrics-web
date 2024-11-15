@@ -20,6 +20,9 @@ jobs:
             - run: pnpm run build
             - name: Deploy
               uses: cloudflare/wrangler-action@v3
+              env:
+                # https://github.com/cloudflare/workers-sdk/issues/6466#issuecomment-2288798843
+                CLOUDFLARE_ACCOUNT_ID: 9a0d3ae785f5f07eb410e63ec29712ec
               with:
                 apiToken: ${{ secrets.CLOUDFLARE_TOKEN }}
                 command: pages deploy
