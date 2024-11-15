@@ -3,7 +3,12 @@ export default defineNuxtConfig({
 
   ssr: false,
 
+  nitro: {
+    preset: "cloudflare-pages"
+  },
+
   modules: [
+    'nitro-cloudflare-dev',
     'nuxt-icon',
     '@nuxt/ui',
     '@nuxtjs/tailwindcss',

@@ -18,8 +18,6 @@ jobs:
                 cache: 'pnpm'
             - run: pnpm i --shamefully-hoist
             - run: pnpm run build
-              env:
-                NITRO_PRESET: cloudflare
             - name: Deploy
               uses: cloudflare/wrangler-action@v3
               with:
