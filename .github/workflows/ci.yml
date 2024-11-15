@@ -6,7 +6,6 @@ on:
             - master
 env:
   BASE_URL: musikus.gutikus.schlau.bi
-  CLOUDFLARE_ACCOUNT_ID: 9a0d3ae785f5f07eb410e63ec29712ec
 
 jobs:
     deploy:
@@ -23,4 +22,5 @@ jobs:
               uses: cloudflare/wrangler-action@v3
               with:
                 apiToken: ${{ secrets.CLOUDFLARE_TOKEN }}
+                accountId: 9a0d3ae785f5f07eb410e63ec29712ec
                 command: pages deploy
