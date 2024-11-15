@@ -1,9 +1,10 @@
 name = "lyrics-app"
-workers_dev = true
-compatibility_flags = [ "nodejs_compat" ]
+compatibility_flags = ["nodejs_compat"]
 compatibility_date = "2024-09-23"
-account_id = "9a0d3ae785f5f07eb410e63ec29712ec"
 pages_build_output_dir = "./dist"
+routes = [
+    { patterhn = "lyricusgutikus.schlau.bi", zone_name = "schlau.bi" }
+]
 
 [vars]
 BASE_URL = 'https://musikus.gutikus.schlau.bi'
