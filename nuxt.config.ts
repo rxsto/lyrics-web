@@ -18,7 +18,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       baseUrl: `${process.env.BASE_URL || 'http://localhost:8080'}/lyrics`,
-      wsUrl: `${process.env.BASE_URL || 'ws://localhost:8080'}/lyrics`,
+      wsUrl: `${process.env.WS_URL || 'ws://localhost:8080'}/lyrics`,
       apiKey: process.env.API_KEY || ''
     }
   }
